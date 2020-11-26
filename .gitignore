@@ -3,3 +3,4 @@ CMakeListsPrivate.txt
 cmake-build-*/ 
 /.idea
 /.travis.yml
+.DS_Store
