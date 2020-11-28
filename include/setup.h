@@ -3,16 +3,15 @@
 //
 #include "Arduino.h"
 #include "WiFi.h"
+#include "wifiHelpers.h"
+#include "statusScreen.h"
+#include "interruptHandlers.h"
 
 #ifndef IAQUARIUM2_ESP_SETUP_H
 #define IAQUARIUM2_ESP_SETUP_H
 
 void pinSetup() {
     // Touch buttons
-    //touchAttachInterrupt(TOUCH1, {}, THRESHOLD);
-    //touchAttachInterrupt(TOUCH2, {}, THRESHOLD);
-    //touchAttachInterrupt(TOUCH3, {}, THRESHOLD);
-    //touchAttachInterrupt(TOUCH4, {}, THRESHOLD);
 
     // Relays
     pinMode(RELAY1, OUTPUT);
@@ -25,6 +24,10 @@ void pinSetup() {
 
     // Peripherals
 //    pinMode(STATUS_LED, OUTPUT);
+}
+
+void sensorSetup() {
+    waterTempSensor.begin();
 }
 
 void screenSetup() {
@@ -44,20 +47,6 @@ void screenSetup() {
     oled.setCursor(0, 0);
     oled.print("iAquariumESP v1.0");
     oled.display();
-}
-
-bool connectToWiFi() {
-    WiFi.begin(ssid, password);
-    int counter = 0;
-    while (WiFi.status() != WL_CONNECTED && counter < 10) {
-        delay(1000);
-        counter++;
-    }
-    if (WiFi.status() == WL_CONNECTED) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 void wifiSetup() {
@@ -83,6 +72,7 @@ void wifiSetup() {
             oled.print("Connected!");
             oled.setCursor(0, 32);
             oled.print(WiFi.localIP());
+#ifdef OTA_UPDATE
             ArduinoOTA
                     .onStart([]() {
                         String type;
@@ -110,6 +100,7 @@ void wifiSetup() {
                     });
 
             ArduinoOTA.begin();
+#endif
         } else {
             oled.print("WiFi unav. (ATM)");
         }
@@ -119,6 +110,21 @@ void wifiSetup() {
         oled.print("Network not found");
         oled.display();
     }
+}
+
+void setupTimers() {
+    fiveSecTimer = timerBegin(0, 80, true);
+}
+
+void setupInterrupts() {
+    //touchAttachInterrupt(TOUCH1, &button1Handler, THRESHOLD);
+    //touchAttachInterrupt(TOUCH2, &button2Handler, THRESHOLD);
+    //touchAttachInterrupt(TOUCH3, &button3Handler, THRESHOLD);
+    //touchAttachInterrupt(TOUCH4, &button4Handler, THRESHOLD);
+
+    timerAttachInterrupt(fiveSecTimer, &handle5SecTimerHandler , true);
+    timerAlarmWrite(fiveSecTimer, 5000000, true);
+    timerAlarmEnable(fiveSecTimer);
 }
 
 #endif //IAQUARIUM2_ESP_SETUP_H

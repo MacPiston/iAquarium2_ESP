@@ -5,10 +5,13 @@
 #ifndef IAQUARIUM2_ESP_CONFIG_H
 #define IAQUARIUM2_ESP_CONFIG_H
 #include "Adafruit_SSD1306.h"
+#include "OneWire.h"
+#include "DallasTemperature.h"
 
 //----- WiFi -----
 const char* ssid = "niewiem";
 const char* password = "maciek2505";
+const char* ntpServer = "pool.ntp.org";
 
 //----- Touch buttons -----
 #define THRESHOLD 40
@@ -50,13 +53,27 @@ Adafruit_SSD1306 oled(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK, OLED_DC,
 #define PH_ANALOG GPIO_NUM_34
 #define TDS_ANALOG GPIO_NUM_35
 #define TEMP_1WIRE GPIO_NUM_32
+    OneWire waterTempOneWire(TEMP_1WIRE);
+    DallasTemperature waterTempSensor(&waterTempOneWire);
 
 //----- Peripherals -----
 #define STATUS_LED GPIO_NUM_22
+//#define OTA_UPDATE
 
 //----- Data -----
-int phRead = 0;
-int tdsRead = 0;
+float phRead = 0;
+float ph[5] = {0, 0, 0, 0, 0};
+float tdsRead = 0;
+float tds[5] = {0, 0, 0, 0, 0};
+float tempCread = 0;
+float tempsC[5] = {0, 0, 0, 0, 0};
 
+short measurementCounter = 0;
+
+//----- Timers -----
+tm currentTime;
+hw_timer_t * fiveSecTimer = NULL;
+bool fiveSecTriggered = false;
+portMUX_TYPE fiveSecTimerMux = portMUX_INITIALIZER_UNLOCKED;
 
 #endif //IAQUARIUM2_ESP_CONFIG_H
