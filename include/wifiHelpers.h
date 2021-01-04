@@ -30,9 +30,12 @@ bool connectToWiFi() {
  */
 void IRAM_ATTR fetchCurrentTime() {
     if (WiFi.status() == WL_CONNECTED) {
-        configTime(0, 3600, ntpServer);
         getLocalTime(&currentTime);
     }
+}
+
+int getWiFiStrengthPercentage() {
+    return 2 * (100 + WiFi.RSSI());
 }
 
 #endif //IAQUARIUM2_ESP_WIFIHELPERS_H

@@ -11,7 +11,11 @@
 #define IAQUARIUM2_ESP_SETUP_H
 
 void pinSetup() {
-    // Touch buttons
+    // Hardware buttons
+    pinMode(TOUCH1, INPUT_PULLUP);
+    pinMode(TOUCH2, INPUT_PULLUP);
+    pinMode(TOUCH3, INPUT_PULLUP);
+    pinMode(TOUCH4, INPUT_PULLUP);
 
     // Relays
     pinMode(RELAY1, OUTPUT);
@@ -21,9 +25,10 @@ void pinSetup() {
     // Sensors
     adcAttachPin(PH_ANALOG);
     adcAttachPin(TDS_ANALOG);
+    analogSetSamples(8);
 
     // Peripherals
-//    pinMode(STATUS_LED, OUTPUT);
+    pinMode(STATUS_LED, OUTPUT);
 }
 
 void sensorSetup() {
@@ -32,7 +37,7 @@ void sensorSetup() {
 
 void screenSetup() {
 #ifdef OLED_SPI
-
+// TODO
 #endif
 
 #ifdef OLED_I2C
@@ -45,7 +50,7 @@ void screenSetup() {
     oled.setTextColor(WHITE);
     oled.setTextSize(1);
     oled.setCursor(0, 0);
-    oled.print("iAquariumESP v1.0");
+    oled.print("iAquariumESP v1.1");
     oled.display();
 }
 
@@ -72,6 +77,12 @@ void wifiSetup() {
             oled.print("Connected!");
             oled.setCursor(0, 32);
             oled.print(WiFi.localIP());
+            configTime(0, 3600, ntpServer);
+            fetchCurrentTime();
+#ifdef FIREBASE
+            //Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+            //Firebase.reconnectWiFi(true);
+#endif
 #ifdef OTA_UPDATE
             ArduinoOTA
                     .onStart([]() {
@@ -113,18 +124,23 @@ void wifiSetup() {
 }
 
 void setupTimers() {
-    fiveSecTimer = timerBegin(0, 80, true);
+    twoSecTimer = timerBegin(0, 8000, true);
+    fifteenSecTimer = timerBegin(1, 8000, true);
 }
 
 void setupInterrupts() {
-    //touchAttachInterrupt(TOUCH1, &button1Handler, THRESHOLD);
-    //touchAttachInterrupt(TOUCH2, &button2Handler, THRESHOLD);
-    //touchAttachInterrupt(TOUCH3, &button3Handler, THRESHOLD);
-    //touchAttachInterrupt(TOUCH4, &button4Handler, THRESHOLD);
+    attachInterrupt(TOUCH1, &button1Handler, FALLING);
+    attachInterrupt(TOUCH2, &button2Handler, FALLING);
+    attachInterrupt(TOUCH3, &button3Handler, FALLING);
+    attachInterrupt(TOUCH4, &button4Handler, FALLING);
 
-    timerAttachInterrupt(fiveSecTimer, &handle5SecTimerHandler , true);
-    timerAlarmWrite(fiveSecTimer, 5000000, true);
-    timerAlarmEnable(fiveSecTimer);
+    timerAttachInterrupt(twoSecTimer, &handle2SecTimerInterrupt , true);
+    timerAlarmWrite(twoSecTimer, 20000, true);
+    timerAlarmEnable(twoSecTimer);
+
+    timerAttachInterrupt(fifteenSecTimer, &handle15SecTimerInterrupt, true);
+    timerAlarmWrite(fifteenSecTimer, 150000, true);
+    timerAlarmEnable(fifteenSecTimer);
 }
 
 #endif //IAQUARIUM2_ESP_SETUP_H

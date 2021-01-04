@@ -11,6 +11,7 @@ void setup() {
     wifiSetup();
     setupTimers();
     setupInterrupts();
+    oled.clearDisplay();
 }
 
 void loop() {
@@ -18,9 +19,8 @@ void loop() {
     ArduinoOTA.handle();
 #endif
     // Check for refresh flag
-    if (fiveSecTriggered) {
-        // Update current time
-        fetchCurrentTime();
+    if (twoSecTriggered) {
+        digitalWrite(STATUS_LED, HIGH);
 
         // Update sensor readings
         readWaterTemp();
@@ -30,14 +30,26 @@ void loop() {
         if (measurementCounter == 5) measurementCounter = 0;
 
         // Update status screen
+        oled.clearDisplay();
         updateStatusBar();
-        updateStatusScreen();
+        oled.display();
+        updateStatusScreen(screenId);
+        oled.display();
 
-        fiveSecTriggered = false;
+        digitalWrite(STATUS_LED, LOW);
+        twoSecTriggered = false;
+    }
+
+    if (fifteenSecTriggered) {
+        fetchCurrentTime();
+        fifteenSecTriggered = false;
     }
 
     // Check for time-based actions
 
-    // Check for sensor-based actions
 
+    // Update relays outputs
+    digitalWrite(RELAY1, relays[0]);
+    digitalWrite(RELAY2, relays[1]);
+    digitalWrite(RELAY3, relays[2]);
 }
