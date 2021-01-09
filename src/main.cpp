@@ -24,16 +24,16 @@ void loop() {
 
         // Update sensor readings
         readWaterTemp();
-        readWaterPh();
-        readWaterTds();
+        //readWaterPh();
+        //readWaterTds();
         measurementCounter++;
         if (measurementCounter == 5) measurementCounter = 0;
 
         // Update status screen
-        oled.clearDisplay();
+        canvas->fillScreen(BLACK);
         updateStatusBar();
-        oled.display();
         updateStatusScreen(screenId);
+        oled.drawBitmap(0, 0, canvas->getBuffer(), 128, 64, WHITE, BLACK);
         oled.display();
 
         digitalWrite(STATUS_LED, LOW);

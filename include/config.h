@@ -71,13 +71,12 @@ float tds[5] = {0, 0, 0, 0, 0};
 float tempCread = 0;
 float tempsC[5] = {0, 0, 0, 0, 0};
 short measurementCounter = 0;
-volatile bool relays[3] = {false, false, false};
-
+GFXcanvas1 *canvas = new GFXcanvas1(128, 64);
 tm currentTime;
 
 volatile uint32_t debounceTimer = 0;
-
 volatile int screenId = 0;
+volatile bool relays[3] = {false, false, false};
 
 //----- Timers -----
 hw_timer_t *twoSecTimer = nullptr;

@@ -5,54 +5,52 @@
 #define IAQUARIUM2_ESP_STATUSSCREEN_H
 
 #include "wifiHelpers.h"
+#include "config.h"
 #include <ctime>
 
 /**
  * Update status bar: time, WiFi signal strength,
  */
 void updateStatusBar() {
-    oled.drawRect(0, 0, 128, 16, WHITE);
-    oled.writeFillRect(0, 0, 128, 16, WHITE);
-    oled.setTextColor(BLACK);
+    canvas->writeFillRect(0, 0, 128, 16, WHITE);
+    canvas->setTextColor(BLACK);
+    canvas->setCursor(2, 5);
+    canvas->setTextSize(1);
 
-    oled.setCursor(2, 7);
-    oled.setTextSize(1);
-    char *temp = new char[3];
-    sprintf(temp, "%d", getWiFiStrengthPercentage());
-    oled.print(temp);
-    delete[] temp;
+    canvas->print(getWiFiStrengthPercentage());
 
-    oled.setCursor(32, 1);
-    oled.setTextSize(2);
-    oled.println(&currentTime, "%H:%M");
+    canvas->setCursor(32, 1);
+    canvas->setTextSize(2);
+    canvas->println(&currentTime, "%H:%M");
 }
 
 /**
  * Update main status screen: water params, next time-based action
  */
 void updateStatusScreen(int id) {
-    GFXcanvas1 canvas(128, 48);
-
+    canvas->setTextColor(WHITE);
     switch (id) {
-        case 1: // Main screen
-            canvas.setTextSize(2);
-            canvas.setCursor(0, 0);
-            canvas.print("Temp.:");
-
-            canvas.setCursor(0, 16);
-            canvas.print("TDS:");
+        case 0: // Main screen
+            canvas->setTextSize(2);
+            canvas->setCursor(0, 16);
+            canvas->print("Tmp:");
+            canvas->print(tempCread);
+            canvas->setCursor(0, 32);
+            canvas->print("TDS:");
+            canvas->print(tdsRead);
+            canvas->setCursor(0, 48);
+            canvas->print("pH:");
+            canvas->print(phRead);
+            break;
+        case 1:
 
             break;
         case 2:
 
             break;
-        case 3:
-
-            break;
         default: ;
 
     }
-    oled.drawBitmap(0, 16, canvas.getBuffer(), 128, 48, WHITE);
 }
 
 #endif //IAQUARIUM2_ESP_STATUSSCREEN_H
