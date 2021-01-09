@@ -14,10 +14,14 @@
 void updateStatusBar() {
     canvas->writeFillRect(0, 0, 128, 16, WHITE);
     canvas->setTextColor(BLACK);
+
     canvas->setCursor(2, 5);
     canvas->setTextSize(1);
-
     canvas->print(getWiFiStrengthPercentage());
+
+    canvas->setCursor(105, 5);
+    canvas->print(screenId + 1);
+    canvas->print("/3");
 
     canvas->setCursor(32, 1);
     canvas->setTextSize(2);
@@ -43,7 +47,16 @@ void updateStatusScreen(int id) {
             canvas->print(phRead);
             break;
         case 1:
-
+            canvas->setTextSize(2);
+            canvas->setCursor(0, 16);
+            canvas->print("Relay 1:");
+            canvas->print(relays[0]);
+            canvas->setCursor(0, 32);
+            canvas->print("Relay 2:");
+            canvas->print(relays[1]);
+            canvas->setCursor(0, 48);
+            canvas->print("Relay 3:");
+            canvas->print(relays[2]);
             break;
         case 2:
 

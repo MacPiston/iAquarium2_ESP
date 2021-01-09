@@ -50,7 +50,7 @@ void screenSetup() {
     oled.setTextColor(WHITE);
     oled.setTextSize(1);
     oled.setCursor(0, 0);
-    oled.print("iAquariumESP v1.1");
+    oled.print("iAquariumESP v1.2.1");
     oled.display();
 }
 

@@ -25,7 +25,7 @@ void loop() {
         // Update sensor readings
         readWaterTemp();
         //readWaterPh();
-        //readWaterTds();
+        readWaterTds();
         measurementCounter++;
         if (measurementCounter == 5) measurementCounter = 0;
 
