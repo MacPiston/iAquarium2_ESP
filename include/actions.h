@@ -7,20 +7,18 @@
 // Available actions DO NOT TOUCH
 #define NACTIONS 10
 struct action {
-    bool relay0;
-    bool relay1;
-    bool relay2;
+    int relayId;
+    bool relayState;
 } pack;
 
 struct timeAction {
     tm triggerTime;
     action state;
-    void setup(int hour, int min, bool r0, bool r1, bool r2) {
+    void setup(int hour, int min, int relay, bool r) {
         this->triggerTime.tm_hour = hour;
         this->triggerTime.tm_min = min;
-        this->state.relay0 = r0;
-        this->state.relay1 = r1;
-        this->state.relay2 = r2;
+        this->state.relayId = relay;
+        this->state.relayState = r;
     }
     bool compareTime(int hour, int min) {
         if (this->triggerTime.tm_hour == hour) {
@@ -29,82 +27,81 @@ struct timeAction {
         return false;
     }
     void setRelays() {
-        relays[0] = this->state.relay0;
-        relays[1] = this->state.relay1;
-        relays[2] = this->state.relay2;
+        relays[this->state.relayId] = this->state.relayId;
     }
 };
 
 struct tempAction {
     float triggerValue;
     action state;
-    void setup(float trigger, bool r0, bool r1, bool r2) {
+    void setup(float trigger, int relay, bool r) {
         this->triggerValue = trigger;
-        this->state.relay0 = r0;
-        this->state.relay1 = r1;
-        this->state.relay2 = r2;
+        this->state.relayId = relay;
+        this->state.relayState = r;
     }
     void setRelays() {
-        relays[0] = this->state.relay0;
-        relays[1] = this->state.relay1;
-        relays[2] = this->state.relay2;
+        relays[this->state.relayId] = this->state.relayId;
     }
 };
 
 struct phAction {
     float triggerValue;
     action state;
-    void setup(float trigger, bool r0, bool r1, bool r2) {
+    void setup(float trigger, int relay, bool r) {
         this->triggerValue = trigger;
-        this->state.relay0 = r0;
-        this->state.relay1 = r1;
-        this->state.relay2 = r2;
+        this->state.relayId = relay;
+        this->state.relayState = r;
     }
     void setRelays() {
-        relays[0] = this->state.relay0;
-        relays[1] = this->state.relay1;
-        relays[2] = this->state.relay2;
+        relays[this->state.relayId] = this->state.relayId;
     }
 };
 
 struct tdsAction {
     float triggerValue;
     action state;
-    void setup(float trigger, bool r0, bool r1, bool r2) {
+    void setup(float trigger, int relay, bool r) {
         this->triggerValue = trigger;
-        this->state.relay0 = r0;
-        this->state.relay1 = r1;
-        this->state.relay2 = r2;
+        this->state.relayId = relay;
+        this->state.relayState = r;
     }
     void setRelays() {
-        relays[0] = this->state.relay0;
-        relays[1] = this->state.relay1;
-        relays[2] = this->state.relay2;
+        relays[this->state.relayId] = this->state.relayId;
     }
 };
 
 struct timeAction timeActionArray[NACTIONS];
-struct tempAction tempActionArray[NACTIONS];
-struct phAction phActionArray[NACTIONS];
-struct tdsAction tdsActionArray[NACTIONS];
+struct tempAction tempHigherThanActionArray[NACTIONS];
+struct tempAction tempLowerThanActionArray[NACTIONS];
+struct phAction phHigherThanActionArray[NACTIONS];
+struct phAction phLowerThanActionArray[NACTIONS];
+struct tdsAction tdsHigherThanActionArray[NACTIONS];
+struct tdsAction tdsLowerThanActionArray[NACTIONS];
 
+/////////////////////////////////////////////////////////////////
 // user-defined actions - ADD NEW ACTIONS HERE
 void setupUserActions() {
     // TIME
 #define TIME_USED 2
-    timeActionArray[0].setup(8, 0, true, false, false);
-    timeActionArray[1].setup(21, 30, false, false, false);
+    timeActionArray[0].setup(8, 0, 0, true);
+    timeActionArray[1].setup(21, 30, 0, false);
 
-    // TEMP
-#define TEMP_USED 0
+    // TEMPERATURE
+#define TEMP_HIGHER_USED 1
+#define TEMP_LOWER_USED 1
+    tempHigherThanActionArray[0].setup(25.6, 1, false);
+    tempLowerThanActionArray[0].setup(23.4, 1, true);
 
     // PH
-#define PH_USED 0
+#define PH_HIGHER_USED 0
+#define PH_LOWER_USED 0
 
     // TDS
-#define TDS_USED 0
+#define TDS_HIGHER_USED 0
+#define TDS_LOWER_USED 0
 
 }
+/////////////////////////////////////////////////////////////////
 
 void checkForTimeActions() {
     int currentHour = currentTime.tm_hour;
@@ -112,45 +109,37 @@ void checkForTimeActions() {
 
     // TIME
     for (int i = 0; i < TIME_USED; i++) {
-        if (timeActionArray[i].compareTime(currentHour, currentMin)) {
-            timeActionArray[i].setRelays();
-        }
+        if (timeActionArray[i].compareTime(currentHour, currentMin)) timeActionArray[i].setRelays();
     }
 
-    // TEMP
-    for (int i = 0; i < TEMP_USED; i++) {
-        // HIGHER THAN READ
-        if (tempActionArray[i].triggerValue > tempCread) {
-
-        }
-        // LOWER THAN READ
-        else if (tempActionArray[i].triggerValue < tempCread) {
-
-        }
+    // TEMPERATURE
+    // HIGHER THAN READ
+    for (int i = 0; i < TEMP_HIGHER_USED; i++) {
+        if (tempHigherThanActionArray[i].triggerValue > tempCread) tempHigherThanActionArray[i].setRelays();
+    }
+    // LOWER THAN READ
+    for (int i = 0; i < TEMP_LOWER_USED; ++i) {
+        if (tempLowerThanActionArray[i].triggerValue < tempCread) tempLowerThanActionArray[i].setRelays();
     }
 
     // PH
-    for (int i = 0; i < PH_USED; i++) {
-        // HIGHER THAN READ
-        if (phActionArray[i].triggerValue > phRead) {
-
-        }
-        // LOWER THAN READ
-        else if (phActionArray[i].triggerValue < phRead) {
-
-        }
+    // HIGHER THAN READ
+    for (int i = 0; i < PH_HIGHER_USED; i++) {
+        if (phHigherThanActionArray[i].triggerValue > phRead) phHigherThanActionArray[i].setRelays();
+    }
+    // LOWER THAN READ
+    for (int i = 0; i < PH_LOWER_USED; i++) {
+        if (phLowerThanActionArray[i].triggerValue < phRead) phLowerThanActionArray[i].setRelays();
     }
 
     // TDS
-    for (int i = 0; i < TDS_USED; i++) {
-        // HIGHER THEN READ
-        if (tdsActionArray[i].triggerValue > tdsRead) {
-            
-        }
-        // LOWER THAN READ
-        else if (tdsActionArray[i].triggerValue < tdsRead) {
-
-        }
+    // HIGHER THEN READ
+    for (int i = 0; i < TDS_HIGHER_USED; i++) {
+        if (tdsHigherThanActionArray[i].triggerValue > tdsRead) tdsHigherThanActionArray[i].setRelays();
+    }
+    // LOWER THAN READ
+    for (int i = 0; i < TDS_LOWER_USED; ++i) {
+        if (tdsLowerThanActionArray[i].triggerValue < tdsRead) tdsLowerThanActionArray[i].setRelays();
     }
 
 }
