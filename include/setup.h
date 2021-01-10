@@ -54,6 +54,13 @@ void screenSetup() {
     oled.display();
 }
 
+void serverSetup() {
+    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/index.html", String(), false, placeholderProcessor);
+    });
+    server.begin();
+}
+
 void wifiSetup() {
     oled.setCursor(0, 8);
     oled.print("Connecting WiFi...");
@@ -79,6 +86,12 @@ void wifiSetup() {
             oled.print(WiFi.localIP());
             configTime(0, 3600, ntpServer);
             fetchCurrentTime();
+            if (!SPIFFS.begin(true)) {
+                oled.setCursor(0, 40);
+                oled.print("SPIFFS error!");
+                for (;;);
+            }
+            serverSetup();
 #ifdef FIREBASE
             //Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
             //Firebase.reconnectWiFi(true);
@@ -114,12 +127,14 @@ void wifiSetup() {
 #endif
         } else {
             oled.print("WiFi unav. (ATM)");
+            for (;;);
         }
         oled.display();
     } else {
         oled.setCursor(0, 24);
         oled.print("Network not found");
         oled.display();
+        for (;;);
     }
 }
 

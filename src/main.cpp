@@ -3,6 +3,7 @@
 #include "config.h"
 #include "setup.h"
 #include "statusScreen.h"
+#include "actions.h"
 
 void setup() {
     pinSetup();
@@ -11,6 +12,7 @@ void setup() {
     wifiSetup();
     setupTimers();
     setupInterrupts();
+    setupUserActions();
     oled.clearDisplay();
 }
 
@@ -42,11 +44,9 @@ void loop() {
 
     if (fifteenSecTriggered) {
         fetchCurrentTime();
+        checkForTimeActions();
         fifteenSecTriggered = false;
     }
-
-    // Check for time-based actions
-
 
     // Update relays outputs
     digitalWrite(RELAY1, relays[0]);

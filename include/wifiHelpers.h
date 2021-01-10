@@ -38,4 +38,8 @@ int getWiFiStrengthPercentage() {
     return 2 * (100 + WiFi.RSSI());
 }
 
+String placeholderProcessor(const String& var) {
+    return String();
+}
+
 #endif //IAQUARIUM2_ESP_WIFIHELPERS_H

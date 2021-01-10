@@ -10,11 +10,13 @@
 #include "DallasTemperature.h"
 #include "esp_log.h"
 #include "FirebaseESP32.h"
+#include "ESPAsyncWebServer.h"
 
 //----- WiFi -----
 const char *ssid = "niewiem";
 const char *password = "maciek2505";
 const char *ntpServer = "pool.ntp.org";
+AsyncWebServer server(80);
 
 //----- Buttons -----
 #define THRESHOLD 40
