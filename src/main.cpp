@@ -44,7 +44,7 @@ void loop() {
 
     if (fifteenSecTriggered) {
         fetchCurrentTime();
-        checkForTimeActions();
+        checkForActions();
         fifteenSecTriggered = false;
     }
 

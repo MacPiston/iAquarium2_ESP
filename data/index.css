@@ -1,0 +1,54 @@
+html {
+    display: inline-block;
+    margin: 0px auto;
+    text-align: center;
+    align-items: center;
+    left: 50%;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+  background-color: gray;
+  text-shadow: 2px 2px 5px black;
+}
+.pagination a {
+    color: #4caf50;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-size: 20px;
+}
+.pagination a.active {
+    background-color: white;
+    border-radius: 5px;
+    text-shadow: 0px 0px 0px black;
+}
+h1,
+h2,
+h3,
+h4 {
+  color: #4caf50;
+  text-shadow: 2px 2px 5px black;
+}
+#paramstable {
+  border: 2px solid whitesmoke;
+  width: 35%;
+  text-align: center;
+  vertical-align: baseline;
+  border-collapse: collapse;
+  overflow: hidden;
+  table-layout: fixed;
+}
+th,
+td {
+  border: 2px solid whitesmoke;
+  text-align: center;
+  vertical-align: baseline;
+  padding: 15px;
+  color: white;
+}
+th {
+  background-color: #4caf50;
+}
+td {
+  font-size: 20px;
+}

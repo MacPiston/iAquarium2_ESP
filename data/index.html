@@ -1,10 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>iAquarium v1.2.1</title>
-</head>
-<body>
-Test of SPIFFS HTML page
-</body>
+  <meta charset="UTF-8" />
+  <title>iAquarium - Status</title>
+  <link rel="stylesheet" type="text/css" href="index.css" />
+  <body>
+    <center>
+      <div class="pagination">
+        <a class="active" href="/index.html">Status</a>
+        <a href="/timeActions.html">Time Actions</a>
+        <a href="/temperatureActions.html">Temp Actions</a>
+        <a href="/phActions.html">pH Actions</a>
+        <a href="/tdsActions.html">TDS Actions</a>
+      </div>
+      <br />
+      <h1>iAquarium v1.3 - Tank Status</h1>
+      <hr />
+      <h2>Latest water params - %TIMExx%</h2>
+      <table id="paramstable">
+        <tbody>
+          <tr>
+            <th>Temperature:</th>
+            <th>pH:</th>
+            <th>TDS:</th>
+          </tr>
+          <tr>
+            <td>%TEMPxx% ℃</td>
+            <td>%PHxxxx%</td>
+            <td>%TDSxxx%</td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+  </body>
 </html>

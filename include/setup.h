@@ -50,13 +50,35 @@ void screenSetup() {
     oled.setTextColor(WHITE);
     oled.setTextSize(1);
     oled.setCursor(0, 0);
-    oled.print("iAquariumESP v1.2.1");
+    oled.print("iAquariumESP ");
+    oled.print(VER);
     oled.display();
 }
 
 void serverSetup() {
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(SPIFFS, "/index.html", String(), false, placeholderProcessor);
+        request->send(SPIFFS, "/index.html", String(), false, statusPlaceholderProcessor);
+    });
+    server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/index.html", String(), false, statusPlaceholderProcessor);
+    });
+    server.on("/index.css", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/index.css", "text/css");
+    });
+    server.on("/timeActions.html", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/timeActions.html", String(), false, timePlaceholderProcessor);
+    });
+    server.on("/temperatureActions.html", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/temperatureActions.html", String(), false, temperaturePlaceholderProcessor);
+    });
+    server.on("/phActions.html", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/phActions.html", String(), false, phPlaceholderProcessor);
+    });
+    server.on("/tdsActions.html", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/tdsActions.html", String(), false, tdsPlaceholderProcessor);
+    });
+    server.on("/actions.css", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/actions.css", "text/css");
     });
     server.begin();
 }

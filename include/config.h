@@ -11,6 +11,7 @@
 #include "esp_log.h"
 #include "FirebaseESP32.h"
 #include "ESPAsyncWebServer.h"
+#define VER "v1.3.1"
 
 //----- WiFi -----
 const char *ssid = "niewiem";
