@@ -34,7 +34,7 @@ void IRAM_ATTR button1Handler() {
     portENTER_CRITICAL_ISR(&mux);
     if (checkButtonDebounce()) {
         screenId++;
-        if (screenId == 2) screenId = 0;
+        if (screenId >= 3) screenId = 0;
         twoSecTriggered = true;
     }
     portEXIT_CRITICAL_ISR(&mux);

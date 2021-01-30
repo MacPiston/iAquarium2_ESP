@@ -26,8 +26,9 @@ void loop() {
 
         // Update sensor readings
         readWaterTemp();
-        //readWaterPh();
+        readWaterPh();
         readWaterTds();
+        readWaterLeak();
         measurementCounter++;
         if (measurementCounter == 5) measurementCounter = 0;
 
@@ -46,6 +47,13 @@ void loop() {
         fetchCurrentTime();
         checkForActions();
         fifteenSecTriggered = false;
+    }
+
+    if (leakRead < 10) {
+        digitalWrite(BUZZER, HIGH);
+        screenId = 3;
+    } else {
+        digitalWrite(BUZZER, LOW);
     }
 
     // Update relays outputs

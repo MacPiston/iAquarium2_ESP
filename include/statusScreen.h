@@ -59,7 +59,29 @@ void updateStatusScreen(int id) {
             canvas->print(relays[2]);
             break;
         case 2:
-
+            canvas->setTextSize(1);
+            canvas->setCursor(0, 16);
+            canvas->print("Time actions: ");
+            canvas->print(TIME_USED);
+            canvas->setCursor(0, 24);
+            canvas->print("Temp actions: ");
+            canvas->print(TEMP_HIGHER_USED + TEMP_LOWER_USED);
+            canvas->setCursor(0, 32);
+            canvas->print("TDS actions: ");
+            canvas->print(TDS_HIGHER_USED + TDS_LOWER_USED);
+            canvas->setCursor(0, 40);
+            canvas->print("pH actions: ");
+            canvas->print(PH_HIGHER_USED + PH_LOWER_USED);
+            canvas->setCursor(0, 48);
+            canvas->print("IP:");
+            canvas->print(WiFi.localIP());
+            break;
+        case 3:
+            canvas->setTextSize(2);
+            canvas->setCursor(6, 16);
+            canvas->print("LEAK");
+            canvas->setCursor(2, 32);
+            canvas->print("DETECTED");
             break;
         default: ;
 

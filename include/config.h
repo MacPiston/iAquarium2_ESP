@@ -11,7 +11,7 @@
 #include "esp_log.h"
 #include "FirebaseESP32.h"
 #include "ESPAsyncWebServer.h"
-#define VER "v1.3.1"
+#define VER "v1.4.0"
 
 //----- WiFi -----
 const char *ssid = "niewiem";
@@ -59,11 +59,13 @@ Adafruit_SSD1306 oled(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK, OLED_DC,
 #define PH_ANALOG GPIO_NUM_34
 #define TDS_ANALOG GPIO_NUM_35
 #define TEMP_1WIRE GPIO_NUM_32
+#define LEAK_CAPACITIVE GPIO_NUM_14
 OneWire waterTempOneWire(TEMP_1WIRE);
 DallasTemperature waterTempSensor(&waterTempOneWire);
 
 //----- Peripherals -----
 #define STATUS_LED GPIO_NUM_16
+#define BUZZER GPIO_NUM_33
 //#define OTA_UPDATE
 
 //----- Data/GVars -----
@@ -73,6 +75,8 @@ float tdsRead = 0;
 float tds[5] = {0, 0, 0, 0, 0};
 float tempCread = 0;
 float tempsC[5] = {0, 0, 0, 0, 0};
+float leakRead = 15;
+float leak[5] = {0, 0, 0, 0, 0};
 short measurementCounter = 0;
 GFXcanvas1 *canvas = new GFXcanvas1(128, 64);
 tm currentTime;

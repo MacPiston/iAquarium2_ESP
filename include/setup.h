@@ -57,25 +57,49 @@ void screenSetup() {
 
 void serverSetup() {
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(SPIFFS, "/index.html", String(), false, statusPlaceholderProcessor);
+        if (leakRead < 10) {
+            request->send(SPIFFS, "/leak.html", String(), false, statusPlaceholderProcessor);
+        } else {
+            request->send(SPIFFS, "/index.html", String(), false, statusPlaceholderProcessor);
+        }
     });
     server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(SPIFFS, "/index.html", String(), false, statusPlaceholderProcessor);
+        if (leakRead < 10) {
+            request->send(SPIFFS, "/leak.html", String(), false, statusPlaceholderProcessor);
+        } else {
+            request->send(SPIFFS, "/index.html", String(), false, statusPlaceholderProcessor);
+        }
     });
     server.on("/index.css", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/index.css", "text/css");
     });
     server.on("/timeActions.html", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(SPIFFS, "/timeActions.html", String(), false, timePlaceholderProcessor);
+        if (leakRead < 10) {
+            request->send(SPIFFS, "/leak.html", String(), false, statusPlaceholderProcessor);
+        } else {
+            request->send(SPIFFS, "/timeActions.html", String(), false, timePlaceholderProcessor);
+        }
     });
     server.on("/temperatureActions.html", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(SPIFFS, "/temperatureActions.html", String(), false, temperaturePlaceholderProcessor);
+        if (leakRead < 10) {
+            request->send(SPIFFS, "/leak.html", String(), false, statusPlaceholderProcessor);
+        } else {
+            request->send(SPIFFS, "/temperatureActions.html", String(), false, temperaturePlaceholderProcessor);
+        }
     });
     server.on("/phActions.html", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(SPIFFS, "/phActions.html", String(), false, phPlaceholderProcessor);
+        if (leakRead < 10) {
+            request->send(SPIFFS, "/leak.html", String(), false, statusPlaceholderProcessor);
+        } else {
+            request->send(SPIFFS, "/phActions.html", String(), false, phPlaceholderProcessor);
+        }
     });
     server.on("/tdsActions.html", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(SPIFFS, "/tdsActions.html", String(), false, tdsPlaceholderProcessor);
+        if (leakRead < 10) {
+            request->send(SPIFFS, "/leak.html", String(), false, statusPlaceholderProcessor);
+        } else {
+            request->send(SPIFFS, "/tdsActions.html", String(), false, tdsPlaceholderProcessor);
+        }
     });
     server.on("/actions.css", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/actions.css", "text/css");
