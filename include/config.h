@@ -21,10 +21,10 @@ AsyncWebServer server(80);
 
 //----- Buttons -----
 #define THRESHOLD 40
-#define TOUCH1 GPIO_NUM_4
-#define TOUCH2 GPIO_NUM_5
-#define TOUCH3 GPIO_NUM_2
-#define TOUCH4 GPIO_NUM_17
+#define BUTTON1 GPIO_NUM_4
+#define BUTTON2 GPIO_NUM_5
+#define BUTTON3 GPIO_NUM_2
+#define BUTTON4 GPIO_NUM_17
 
 //----- Relays -----
 #define RELAY1 GPIO_NUM_25
@@ -37,7 +37,6 @@ AsyncWebServer server(80);
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-
 #ifdef OLED_I2C
 #define OLED_SDA GPIO_NUM_21
 #define OLED_SCL GPIO_NUM_22

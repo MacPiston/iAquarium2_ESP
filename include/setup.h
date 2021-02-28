@@ -12,10 +12,10 @@
 
 void pinSetup() {
     // Hardware buttons
-    pinMode(TOUCH1, INPUT_PULLUP);
-    pinMode(TOUCH2, INPUT_PULLUP);
-    pinMode(TOUCH3, INPUT_PULLUP);
-    pinMode(TOUCH4, INPUT_PULLUP);
+    pinMode(BUTTON1, INPUT_PULLUP);
+    pinMode(BUTTON2, INPUT_PULLUP);
+    pinMode(BUTTON3, INPUT_PULLUP);
+    pinMode(BUTTON4, INPUT_PULLUP);
 
     // Relays
     pinMode(RELAY1, OUTPUT);
@@ -190,10 +190,10 @@ void setupTimers() {
 }
 
 void setupInterrupts() {
-    attachInterrupt(TOUCH1, &button1Handler, FALLING);
-    attachInterrupt(TOUCH2, &button2Handler, FALLING);
-    attachInterrupt(TOUCH3, &button3Handler, FALLING);
-    attachInterrupt(TOUCH4, &button4Handler, FALLING);
+    attachInterrupt(BUTTON1, &button1Handler, FALLING);
+    attachInterrupt(BUTTON2, &button2Handler, FALLING);
+    attachInterrupt(BUTTON3, &button3Handler, FALLING);
+    attachInterrupt(BUTTON4, &button4Handler, FALLING);
 
     timerAttachInterrupt(twoSecTimer, &handle2SecTimerInterrupt , true);
     timerAlarmWrite(twoSecTimer, 20000, true);
